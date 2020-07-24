@@ -1,0 +1,25 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bookmarks</title>
+</head>
+<body>
+<h1>Bookmarks</h1>
+<div id="bookmark-list"></div>
+</body>
+  <script type="text/javascript">
+    function showBookmarks(bookmarks) {
+      for (let i = 0; i < bookmarks.length; i++) {
+        document.getElementById('bookmark-list')
+        .insertAdjacentHTML('afterend', '<a href=' + bookmarks[i].url + '>' + bookmarks[i].name + '</a><br>');
+      }
+    }
+
+    fetch('/bookmark')
+    .then(response => response.json())
+    .then(data => showBookmarks(data.bookmarks));
+
+  </script>
+</html>

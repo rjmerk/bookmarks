@@ -3,6 +3,8 @@ import datetime
 import psycopg2
 from typing import List, Dict, Optional
 
+from psycopg2.extras import RealDictCursor
+
 
 @unique
 class TABLE(Enum):
@@ -16,7 +18,7 @@ class Database:
         self.cursor = None
 
     def get_by_id(self, table: TABLE, id_: int) -> Optional[Dict]:
-        with self.conn.cursor() as cur:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(
                 f"select * from {table.name} where id = %(id_)s;",
                 dict(id_=id_)
@@ -25,7 +27,7 @@ class Database:
         return result
 
     def get_all(self, table: TABLE, limit: int = 10) -> List:
-        with self.conn.cursor() as cur:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute(
                 f"select * from {table.name} limit %(limit)s",
                 dict(limit=limit)
